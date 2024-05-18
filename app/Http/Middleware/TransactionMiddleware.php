@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
+
+class TransactionMiddleware
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        DB::beginTransaction();
+        try{
+
+            $response = $next($request);
+            DB::commit();
+
+
+
+        }
+        catch(\Throwable $e){
+            DB::rollBack();
+            Log::erroe($e->getMessage());
+
+            return response()->json(['message'=>'Something went wrong'],500);
+
+        }
+        return $response;
+
+}
+}
