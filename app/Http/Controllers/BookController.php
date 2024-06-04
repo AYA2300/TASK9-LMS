@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendBookAddedEmails;
+use App\Mail\BookAddedNotification;
 use App\Models\Book;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -49,14 +52,15 @@ class BookController extends Controller
             'cover_image'=>$request->cover_image,
             'book_file'=>$request->book_file,
 
-
-
     ]);
-     // $book->authors()->attach($request->author_id,['availability'=>true]);
+     SendBookAddedEmails::dispatch($book);
+
     return response()->json([
         'status'=>'success',
-        'book'=>$book
-    ]);
+        'book'=>$book,
+        'message'=> 'Book added and notifications will be sent!'
+
+    ],201);
 }
 
 
