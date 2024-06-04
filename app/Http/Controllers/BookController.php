@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendBookAddedEmails;
-use App\Mail\BookAddedNotification;
+// use App\Mail\BookAddedNotification;
 use App\Models\Book;
-use App\Models\User;
+//use App\Models\User;
 use Illuminate\Http\Request;
+use App\Helpers\ImageHelper;
+
+
 
 class BookController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
@@ -38,22 +42,29 @@ class BookController extends Controller
             'status'=>'success',
             'book'=>$book]);
     }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+
+        //$cover=ImageHelper::uploadImage($request->cover_image);
+
+
+
         $book = Book::create([
             'title'=>$request->title,
             'pages'=>$request->pages,
             'price'=>$request->price,
             'gener'=>$request->gener,
-            'cover_image'=>$request->cover_image,
+            'cover_image'=>$cover,
             'book_file'=>$request->book_file,
 
     ]);
+
+
      SendBookAddedEmails::dispatch($book);
+    // is_json($request);
 
     return response()->json([
         'status'=>'success',
