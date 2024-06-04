@@ -27,25 +27,25 @@ Route::controller(AuthController::class)->prefix('users')->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout')->middleware('auth:api');
     Route::get('profile', 'show')->middleware('auth:api');
-    Route::put('update_profile/{user}', 'updateProfile')->middleware(['auth:api','transaction']);
+    Route::put('update_profile/{user}', 'updateProfile')->middleware('auth:api');
 });
 
 /////////////////////////////////book routes\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 Route::controller(BookController::class)->prefix('books')->group(function () {
     Route::get('all', 'index');
     Route::get('show/{book}', 'show');
-    Route::post('store', 'store');
-    Route::put('update/{book}', 'update');
-    Route::delete('delete/{book}', 'destroy');
+    Route::post('store', 'store')->middleware('admin');
+    Route::put('update/{book}', 'update')->middleware('admin');
+    Route::delete('delete/{book}', 'destroy')->middleware('admin');
 });
 
 /////////////////////////////////authors routes\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 Route::controller(AuthorController::class)->prefix('authors')->group(function () {
     Route::get('all', 'index');
     Route::get('show/{author}', 'show');
-    Route::post('store', 'store');
-    Route::put('update/{author}', 'update');
-    Route::delete('delete/{author}', 'destroy');
+    Route::post('store', 'store')->middleware('admin');
+    Route::put('update/{author}', 'update')->middleware('admin');
+    Route::delete('delete/{author}', 'destroy')->middleware('admin');
 });
 
 

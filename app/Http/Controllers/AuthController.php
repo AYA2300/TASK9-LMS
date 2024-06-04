@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+
+use App\Notifications\NewNotification;
 
 
 class AuthController extends Controller
@@ -22,17 +22,24 @@ class AuthController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
+
         $credentials = $request->only('email', 'password');
+
 
         $token = Auth::attempt($credentials);
         if (!$token) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized',
+
             ], 401);
         }
 
         $user = Auth::user();
+
+
+
+
         return response()->json([
                 'status' => 'success',
                 'user' => $user,
@@ -56,6 +63,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
 
         $token = Auth::login($user);
         return response()->json([
@@ -115,6 +123,17 @@ class AuthController extends Controller
             'user' => $userData,
         ]);
     }
+
+
+    //   public function sendNotification()
+    // {
+    //      $user = auth()->user();
+    // $user->notify(new NewNotification());
+
+    // return response()->json([
+    //     'status' => 'success',
+    //     'message' => 'Notification sent successfully',
+    // ]);}
 
 
 

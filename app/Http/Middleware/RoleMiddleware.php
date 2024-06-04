@@ -17,7 +17,7 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::check() && $request->user()->role == 'admin'){
+        if(Auth::check() && $request->user()->role == 'user'){
 
        return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
